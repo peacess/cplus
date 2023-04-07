@@ -12,7 +12,8 @@
             "cStandard": "c17",
             "cppStandard": "c++20",
             "intelliSenseMode": "linux-clang-x64",
-            "compileCommands": "/home/peace/gopath/src/github.com/partnersss/conditions/code/service/build/compile_commands.json"
+            "compileCommands": "/home/peace/gopath/src/github.com/partnersss/conditions/code/service/build/compile_commands.json",
+            "configurationProvider": "ms-vscode.cmake-tools"
         }
     ],
     "version": 4

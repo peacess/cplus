@@ -16,3 +16,4 @@ set(CMAKE_CXX_STANDARD 20)
 # endif()
 
 add_executable(ordering thread_/ordering_.cpp)
+add_executable(operator lang/overload_/class_8.cpp)
