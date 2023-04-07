@@ -3,6 +3,8 @@
 # Code Style -- cplus 0.1
 
 ## 名词
+左值Lvalue, 可以取地址的值，可以出现在=号的左边（当然它也可以出现在右边）
+右值Rvalue， 不可取地址的值或一个临时值，不可以出现在=号的左边。如一整数常量 5,它是右值； 又如函数返回值等
 
 
 
@@ -39,12 +41,85 @@ int32_t fun_name(){
 ## 代码
 
 1. 使用确定大小的类型，如int32_t而不少使用int类型，int只使用在局部，如循环变量等，像成员变量、或交互，或持久等都使用确定大小类型
-2. 函数入参优先使用const &
+2. 函数入参优先使用const &， 如果想要修改值才使用&，如果有移动含义时才使用&&
+3. 不要重载引用与右值引用，如果要这样做要给出特别的理由。因为当这样重载时，不容易确认是调用的那个函数
 
+```c++
+void f(int32_t& data);
+void f(int32_t&& data);
+
+int32_t&& value = 5;
+foo(value); //这里调用那个函数？
+
+```
+
+### 重载/继承
+1. 在重载bool与int时，在同一参数位置上，不要只bool与int的重载。  
+原因，bool类型比较特别，在c99之前是没有bool类型，VC中BOOL实际是int类型，所以在使用不同版本的编译器会产生不同的结果。  
+下面是错误代码：
+```c++
+void f(int);
+void f(bool);
+f(bool) //这个代码希望调用f(int)，而如果是不支持bool类型与支持的编译器，最后编译的结果会不一样。
+
+```
+2. 不要让自动类型转换发生，自动类型转换容易发生不遇见的结果  
+    *. explicit 单构造函数(注意，当有默认值时，如果可以传单参，也是单构造函数)，加了explicit后显示转换是可以的（包含，static_cast, (T)v -- 旧的强制类型转换）
+    *. operator T() 函数
+3. 不要重载 &&，||，“,”这些运算符，因为它们都是有先后顺序的，一但变成函数调用，就无法确定先后顺序。  
+4. C& C::operator=(const C&);这是operator=的规范用法（返回const，也是可以）   
+
+
+30. 在base class中的static member，在不同的derived class中只有一份  
+    如果想在不同derived class中有不同的 static member，需要使用template，因为范型会做代码展开，所以只每一个derived class都有一份展开，就可以。代码如下。
+```c++
+#include <stdio.h>
+#include <stdlib.h>
+
+template <typename T>
+class Base
+{
+public: 
+    static int staticVar;
+    virtual ~Base(){} // base class must be virtual destructor
+};
+
+template <typename T> int Base<T>::staticVar(1);
+
+class DerivedA : public Base<DerivedA> {};
+class DerivedB : public Base<DerivedB> {};
+
+int main() {
+    
+    DerivedA::staticVar  =2;
+    DerivedB::staticVar = 3;
+    Base<DerivedA>::staticVar = 4;
+
+    printf("a : %d, b: %d , base: %d \n", DerivedA::staticVar, DerivedB::staticVar, Base<DerivedA>::staticVar);
+    return 0;
+}
+// a : 4, b: 3 , base: 4 
+// Base<DerivedA>::staticVar 与 DerivedA::staticVar 代码展开，只有一次，所以它的是同一个变量
+```    
+31. 通过base class来释放内存，而base class的destructor不是virtual时，只会调用base class的destructor函数  
+    所以如果base 类型的destructor必须定义为 virtual。
+    反过来就是，在derived class中需确保 base class中的destructor中virtual的。
+
+### 指针
+1. 各种new与delete的配置对
+    1. new delete -- 分配内存后调用构造， 调用析构函数后释放内存
+    2. new [] delete [] -- 与1一样，只是数组
+    3. operator new/delete, 只分配内存（相当于 malloc与free）
+    4. operator new[]/delete[], 分配数组
+    5. placement new， 在使用它时，一定要注意，内存是否需要调用析构函
+    
 
 ### 多线程
 
 ### 代码提交前准备
+
+### tepmlate
+1. 类型参数据使用typename,不要使用class，除非只能使用class才能编译的情况。  
 
 
 ### 测试
