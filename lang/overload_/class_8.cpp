@@ -16,6 +16,10 @@ public:
     class_8(class_8 &&other);
     /// @brief  为什使用virtual? 当有derived class时，解决 class_8 v (derived class) = class_8 v;
     /// 也就是derived class在使用base class 赋值时，可以正确调用derived class的 operator=方法
+    /// 可以做如下优化， 
+    /// 1. 检查是不是自己=自己
+    /// 2. 如果方便可以检查是否完全相等
+    /// 3. 如果有分配内存时，处理内存分配失败的情况
     virtual class_8 &operator=(const class_8 &other);
     /// @brief  使用virtual原因同上
     virtual class_8 &operator=(class_8 &&other);
