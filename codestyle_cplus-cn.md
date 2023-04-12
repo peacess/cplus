@@ -68,13 +68,11 @@ f(bool) //这个代码希望调用f(int)，而如果是不支持bool类型与支
     *. operator T() 函数
 3. 不要重载 &&，||，“,”这些运算符，因为它们都是有先后顺序的，一但变成函数调用，就无法确定先后顺序。  
 4. C& C::operator=(const C&);这是operator=的规范用法（返回const，也是可以）   
-
-
-30. 在base class中的static member，在不同的derived class中只有一份  
+5. 在base class中的static member，在不同的derived class中只有一份  
     如果想在不同derived class中有不同的 static member，需要使用template，因为范型会做代码展开，所以只每一个derived class都有一份展开，就可以。代码如下。
 ```c++
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 
 template <typename T>
 class Base
@@ -101,9 +99,14 @@ int main() {
 // a : 4, b: 3 , base: 4 
 // Base<DerivedA>::staticVar 与 DerivedA::staticVar 代码展开，只有一次，所以它的是同一个变量
 ```    
-31. 通过base class来释放内存，而base class的destructor不是virtual时，只会调用base class的destructor函数  
+6. 通过base class来释放内存，而base class的destructor不是virtual时，只会调用base class的destructor函数  
     所以如果base 类型的destructor必须定义为 virtual。
     反过来就是，在derived class中需确保 base class中的destructor中virtual的。
+7. 建议不要在 static与inline 函数中使用 "static"的变量，因为这时函数中的static变量的含义可能会冲突。  
+如： inline函数在所有调用的地方会展开，那么这时static a 变量是每一个调用都是一个独立的a，这个与习惯理解冲突。  但是如果编译器认为这个inline 函数不被内联，那么它又是共享的，与习惯理解一样。有这种不确定性，所以不要在inline中直接使用static变量。可以使用static成员变量等方式来代替。
+如： static只在当前文件可见，那么可以在不同文件中定义同名的static 函数，这时在不同static函数中的static a变量，不是共享的，但很容易让人识误以为是共享的。
+终上，为了减少理解的偏差或奇义。
+8. 建议减少使用非类的static 函数。 对于看代码，容易误解
 
 ### 指针
 1. 各种new与delete的配置对
