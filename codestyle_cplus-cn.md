@@ -123,7 +123,22 @@ int main() {
 
 ### tepmlate
 1. 类型参数据使用typename,不要使用class，除非只能使用class才能编译的情况。  
+2. auto
+```c++
+int x = 10;
+const int cx = 11;
+//auto&& 的类型推导与右边值的关系
+auto&& a1 = x; // a1为 int&类型，而不是右值
+auto&& a2 = cx;// a2为 int&类型，而不是右值
+auto&& a3 = 90;// a3为 int&&类型，右值
+//数组会退货为指针
+const char str[] = "test";
+auto astr = str; // astr 为 const char *
+//auto有初始化列表类型
+auto data = {1}; //data不是int类型，而是 initializer_list<int>类型
+auto data2{1};   //data2是 int类型，值为 1
 
+```
 
 ### 测试
 
