@@ -7,7 +7,11 @@
 
 using namespace std;
 
+
+
 int main(){
+
+    PtrType t;
 
     auto x = {1,2,3};
     int xx = 1;

@@ -23,3 +23,6 @@ add_executable(static_inline ${static_inline_src})
 
 FILE(GLOB t_h_cpp_src ./t/h_cpp/*.cpp)
 add_executable(t_h_cpp ${t_h_cpp_src})  
+
+FILE(GLOB pimpl_src ./lang/pimpl/*.cpp)
+add_executable(pimpl ${pimpl_src})  
