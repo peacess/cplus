@@ -8,7 +8,7 @@ private:
     
 public:
     Widget(/* args */);
-    // ~Widget();
+    ~Widget();
 };
 
 

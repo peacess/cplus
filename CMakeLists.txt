@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.22)
 project(cplus)
 
 set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_FLAGS "-fcoroutines")
 
 # set(Boost_USE_STATIC_LIBS        ON)  # only find static libs
 # set(Boost_USE_DEBUG_LIBS         OFF) # ignore debug libs and 
@@ -15,14 +16,21 @@ set(CMAKE_CXX_STANDARD 20)
 #     target_link_libraries(foo ${Boost_LIBRARIES})
 # endif()
 
+# thread folder
 add_executable(ordering thread_/ordering_.cpp)
+add_executable(job thread_/job.cpp)
+
+
+# lang folder
 add_executable(operator lang/overload_/class_8.cpp)
-
 FILE(GLOB static_inline_src ./lang/static_inline/*.cpp)
-add_executable(static_inline ${static_inline_src})   
-
-FILE(GLOB t_h_cpp_src ./t/h_cpp/*.cpp)
-add_executable(t_h_cpp ${t_h_cpp_src})  
+add_executable(static_inline ${static_inline_src}) 
 
 FILE(GLOB pimpl_src ./lang/pimpl/*.cpp)
 add_executable(pimpl ${pimpl_src})  
+
+
+# template folder
+FILE(GLOB t_h_cpp_src ./t/h_cpp/*.cpp)
+add_executable(t_h_cpp ${t_h_cpp_src})  
+

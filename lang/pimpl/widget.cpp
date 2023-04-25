@@ -1,6 +1,7 @@
 #include "widget.h"
 #include <string>
 #include <vector>
+#include <memory>
 
 struct Widget::Impl
 {
@@ -14,6 +15,6 @@ Widget::Widget(/* args */): p(std::make_unique<Impl>())
 {
 }
 
-// Widget::~Widget()
-// {
-// }
+Widget::~Widget()
+{
+}
