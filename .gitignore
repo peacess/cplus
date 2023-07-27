@@ -5,3 +5,6 @@ lang/static_inline/main
 lang/lang_
 lang/thread/main
 t/static_
+thread_/ordering2
+lang/sub_struct
+thread_/book_cu/sorter
